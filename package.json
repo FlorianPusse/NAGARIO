@@ -1,0 +1,15 @@
+{
+  "name": "NAGARIO",
+  "description": "Totally N(OT) AGARIO",
+  "author": "Florian Pusse",
+  "email": "florian.pusse@gmail.com",
+  "dependencies": {
+    "express": "^4.0.0",
+    "socket.io": "1.x"
+  },
+  "license": "MIT",
+  "repository":   { 
+	"type" : "git",
+	"url" : "https://github.com/FlorianPusse/NAGARIO.git"
+  }
+}
