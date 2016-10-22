@@ -33,6 +33,8 @@
 		
 		// SocketIO object used for communication with the webserver
 		self.io = io({transports: ['websocket']});
+		
+		self.zoom = 1;
 
 		/*
 		* Draws the map (grid)
@@ -101,8 +103,8 @@
 			for(var i = 0; i < self.scrapList.length; ++i){
 				var scrapElement = self.scrapList[i];
 				
-				if( scrapElement.x + scrapRadius > self.xOffset && scrapElement.x - scrapRadius < self.xOffset + self.screenWidth &&
-					scrapElement.y + scrapRadius > self.yOffset && scrapElement.y - scrapRadius < self.yOffset + self.screenHeight){
+				if( scrapElement.x + scrapRadius > self.xOffset && scrapElement.x - self.screenWidth - scrapRadius < self.xOffset &&
+					scrapElement.y + scrapRadius > self.yOffset && scrapElement.y - self.yOffset - scrapRadius < self.screenHeight ){
 
 					var distance = Math.sqrt((scrapElement.y - playerY)*(scrapElement.y - playerY) +
 									(scrapElement.x - playerX)*(scrapElement.x - playerX));
@@ -111,6 +113,9 @@
 					if(distance <= Math.abs(scrapRadius - self.player.size)){
 						scrapElement.eat();
 						--i;
+						if (self.zoom - 0.001 > 0){
+							self.zoom -= 0.001;
+						}
 						continue;
 					}
 					
@@ -161,7 +166,7 @@
 				// TODO: Tell server scrap was eaten
 			};
 			self.draw = function(){
-				app.drawPolygon(5, self.size, self.x - app.xOffset, self.y - app.yOffset, self.color);
+				app.drawPolygon(5, self.size*app.zoom, (self.x - app.xOffset)*app.zoom, (self.y - app.yOffset)*app.zoom, self.color);
 			}
 		};
 	
@@ -192,7 +197,7 @@
 				var ctx = app.context;	
 				ctx.beginPath();
 				ctx.fillStyle = self.color;
-				ctx.arc(self.x - app.xOffset, self.y - app.yOffset, self.size, 0, 2*Math.PI);
+				ctx.arc(self.x - app.xOffset, self.y - app.yOffset, self.size*app.zoom, 0, 2*Math.PI);
 				ctx.fill();
 				ctx.stroke();
 				ctx.fillStyle = "black";
