@@ -195,7 +195,7 @@
 				ctx.arc(self.x - app.xOffset, self.y - app.yOffset, self.size, 0, 2*Math.PI);
 				ctx.fill();
 				ctx.stroke();
-				ctx.fillStyle = "black";
+				ctx.fillStyle = color;
 			};
 		}
 		
@@ -266,8 +266,8 @@
 		/*
 		* Player joined the game -> Add it to the list of players
 		*/
-		self.playerJoined = function(playerId, x, y, size){
-			self.otherPlayers.push(new self.Player(playerId,x,y, size));
+		self.playerJoined = function(playerId, x, y, size, color){
+			self.otherPlayers.push(new self.Player(playerId,x,y, size, color));
 		}
 		
 		/*
@@ -302,7 +302,7 @@
 					self.player.color = m.color;
 					break;
 				case "PLAYER JOINED":
-					self.playerJoined(m.playerId,m.x,m.y,m.size,m.color);
+					self.playerJoined(m.playerId,m.playerX,m.playerY,m.size,m.color);
 					break;
 				case "DEAD":
 					alert("You got killed by: " + m.id);

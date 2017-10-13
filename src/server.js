@@ -8,7 +8,7 @@ var conf = require('./config.json');
 
 server.listen(conf.port);
 
-app.use(express.static('public'));
+app.use('/static', express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/home.html');
@@ -70,7 +70,7 @@ io.sockets.on('connection', function (socket) {
 	freshPlayer.type = "WELCOME";
     socket.emit('NAGARIO', freshPlayer);
 	
-	// tell the player who is on the server
+	// tell the player who is already on the server
 	for(var playerId in currentPlayers){
 		if (!currentPlayers.hasOwnProperty(playerId) || playerId == socket._id)
 			continue;
@@ -80,8 +80,12 @@ io.sockets.on('connection', function (socket) {
 		socket.emit('NAGARIO', p);
 	}
 	
+	var p = currentPlayers[socket._id];
+	p.type = "PLAYER JOINED";
+	socket.emit('NAGARIO', p);
+	
 	// announce new player 
-	socket.broadcast.emit('NAGARIO', { type: 'PLAYER JOINED', playerId : socket._id, playerX : currentPlayers[socket._id].x, playerY : currentPlayers[socket._id].y} );
+	socket.broadcast.emit('NAGARIO', p );
 	
 	// Player left
 	socket.on('disconnect', function(){
